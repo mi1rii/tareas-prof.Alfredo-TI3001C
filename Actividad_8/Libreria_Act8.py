@@ -22,6 +22,45 @@ def cargar_a_df(ruta, tipo=None, **kwargs):
 def nulos_ffill(df):
 	return df.fillna(method='ffill')
 
+def outliers(num, df):
+    Q1 = num.quantile(0.25)
+	Q3 = num.quantile(0.75)
+	IQR = Q3 - Q1
+ 
+	limite_superior_iqr = Q3 + 1.5 * IQR
+	limite_inferior_iqr = Q1 - 1.5 * IQR
+ 
+	return df.num[(num <= limite_superior_iqr) & (num >= limite_inferior_iqr)]
+ 
+"""
+num = df_limpio.select_dtypes(include=[np.number])
+
+# Calcular Q1, Q3 e IQR
+Q1 = num.quantile(0.25)
+Q3 = num.quantile(0.75)
+IQR = Q3 - Q1
+
+limite_superior_iqr = Q3 + 1.5 * IQR
+limite_inferior_iqr = Q1 - 1.5 * IQR
+
+# Límites IQR
+print('Límite superior permitido (IQR):')
+print(limite_superior_iqr)
+print('\nLímite inferior permitido (IQR):')
+print(limite_inferior_iqr)
+
+df_outliers_iqr = num[(num <= limite_superior_iqr) & (num >= limite_inferior_iqr)]
+
+# Ver que cuántos valores nulos quedan
+print('\nValores nulos tras eliminar outliers (IQR):')
+print(df_outliers_iqr.isnull().sum())
+
+plt.figure(figsize=(15, 8))
+df_outliers_iqr.plot(kind='box', vert=False)
+plt.title('Valores Atípicos eliminados por Rango Intercuartílico (IQR)')
+plt.show()
+"""
+
 
 def nulos_bfill(df):
 	return df.fillna(method='bfill')
